@@ -1,0 +1,77 @@
+body {
+  background-color: #f0f2f5;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.sidebar {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
+  width: 240px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  padding-top: 1rem;
+}
+
+.sidebar .nav-link {
+  color: rgba(255, 255, 255, 0.7);
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  margin: 0.2rem 0.75rem;
+  transition: all 0.2s;
+}
+
+.sidebar .nav-link:hover,
+.sidebar .nav-link.active {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.main-content {
+  margin-left: 240px;
+  padding: 2rem;
+  min-height: 100vh;
+}
+
+.stat-card {
+  border: none;
+  border-radius: 16px;
+  padding: 1.5rem;
+  color: white;
+  transition: transform 0.2s;
+}
+
+.stat-card:hover {
+  transform: translateY(-3px);
+}
+
+.checkin-btn {
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border: 4px solid;
+  transition: all 0.3s;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+.checkin-btn:hover {
+  transform: scale(1.05);
+}
+
+.badge-Present { background-color: #198754; }
+.badge-Late { background-color: #ffc107; color: #000; }
+.badge-Half-Day { background-color: #0dcaf0; color: #000; }
+.badge-Absent { background-color: #dc3545; }
+.badge-Pending { background-color: #6c757d; }
+.badge-Approved { background-color: #198754; }
+.badge-Rejected { background-color: #dc3545; }
+
+.clock-display {
+  font-size: 2.5rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: #1a1a2e;
+}
