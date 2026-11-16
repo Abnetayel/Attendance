@@ -11,6 +11,7 @@ export default function Layout() {
     };
 
     const isAdmin = user?.role === 'Admin' || user?.role === 'Manager';
+    const isAttendanceManager = user?.role === 'AttendanceManager';
 
     return (
         <div>
@@ -31,7 +32,7 @@ export default function Layout() {
                         </NavLink>
                     </li>
 
-                    {!isAdmin && (
+                    {!isAdmin && !isAttendanceManager && (
                         <li className="nav-item">
                             <NavLink to="/my-attendance" className="nav-link">
                                 <i className="bi bi-calendar-check me-2"></i> My Attendance
@@ -44,6 +45,24 @@ export default function Layout() {
                             <i className="bi bi-calendar2-x me-2"></i> My Leaves
                         </NavLink>
                     </li>
+
+                    {isAttendanceManager && (
+                        <>
+                            <li className="nav-item mt-2">
+                                <small className="text-white-50 px-4 text-uppercase" style={{ fontSize: '0.7rem' }}>Attendance</small>
+                            </li>
+                            <li className="nav-item">
+                                <NavLink to="/manage-attendance" className="nav-link">
+                                    <i className="bi bi-pencil-square me-2"></i> Record Attendance
+                                </NavLink>
+                            </li>
+                            <li className="nav-item">
+                                <NavLink to="/admin/attendance" className="nav-link">
+                                    <i className="bi bi-table me-2"></i> All Attendance
+                                </NavLink>
+                            </li>
+                        </>
+                    )}
 
                     {isAdmin && (
                         <>

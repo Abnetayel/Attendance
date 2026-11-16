@@ -9,6 +9,7 @@ const Leave = require('./models/Leave');
 const users = [
     { name: 'Super Admin', email: 'admin@company.com', password: 'admin123', role: 'Admin', department: 'Management' },
     { name: 'Jane Manager', email: 'manager@company.com', password: 'manager123', role: 'Manager', department: 'Engineering' },
+    { name: 'Attendance Manager', email: 'attendance@company.com', password: 'attendance123', role: 'AttendanceManager', department: 'HR' },
     { name: 'Alice Johnson', email: 'alice@company.com', password: 'alice123', role: 'Employee', department: 'Engineering' },
     { name: 'Bob Smith', email: 'bob@company.com', password: 'bob123', role: 'Employee', department: 'HR' },
     { name: 'Carol White', email: 'carol@company.com', password: 'carol123', role: 'Employee', department: 'Finance' },
@@ -38,6 +39,7 @@ async function seed() {
 
     // Seed attendance for employees (last 14 days)
     const employees = createdUsers.filter(u => u.role === 'Employee');
+    const attendanceManager = createdUsers.find(u => u.role === 'AttendanceManager');
     const attendanceDocs = [];
 
     for (const emp of employees) {
@@ -50,7 +52,15 @@ async function seed() {
             const isLate = checkInHour >= 10;
             const status = isLate ? 'Late' : totalHours < 4 ? 'Half-Day' : 'Present';
 
-            attendanceDocs.push({ userId: emp._id, date, checkInTime, checkOutTime, totalHours, status });
+            attendanceDocs.push({
+                userId: emp._id,
+                date,
+                checkInTime,
+                checkOutTime,
+                totalHours,
+                status,
+                recordedBy: attendanceManager ? attendanceManager._id : null,
+            });
         }
     }
 
@@ -95,11 +105,12 @@ async function seed() {
     console.log('📋 Created leave records');
 
     console.log('\n🎉 Seed complete! Login credentials:');
-    console.log('   Admin   → admin@company.com    / admin123');
-    console.log('   Manager → manager@company.com  / manager123');
-    console.log('   Employee→ alice@company.com     / alice123');
-    console.log('   Employee→ bob@company.com       / bob123');
-    console.log('   Employee→ carol@company.com     / carol123');
+    console.log('   Admin              → admin@company.com       / admin123');
+    console.log('   Manager            → manager@company.com     / manager123');
+    console.log('   Attendance Manager → attendance@company.com   / attendance123');
+    console.log('   Employee           → alice@company.com       / alice123');
+    console.log('   Employee           → bob@company.com         / bob123');
+    console.log('   Employee           → carol@company.com       / carol123');
 
     await mongoose.disconnect();
     process.exit(0);

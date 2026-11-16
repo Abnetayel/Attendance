@@ -27,8 +27,8 @@ export default function UsersPage() {
         e.preventDefault();
         setLoading(true);
         try {
-            await api.post('/users', newUser);
-            toast.success('Employee added.');
+            const { data } = await api.post('/users', newUser);
+            toast.success(`Employee added. Default password: ${data.defaultPassword}`);
             setShowAdd(false);
             setNewUser(EMPTY_NEW);
             fetchUsers();
@@ -146,7 +146,7 @@ export default function UsersPage() {
                                         <div className="col-12">
                                             <p className="text-muted small mb-0">
                                                 <i className="bi bi-info-circle me-1"></i>
-                                                A password setup link will be emailed to the employee.
+                                                The employee is assigned the default password and can log in immediately.
                                             </p>
                                         </div>
                                         <div className="col-md-6">
@@ -154,6 +154,7 @@ export default function UsersPage() {
                                             <select className="form-select" value={newUser.role} onChange={setNew('role')}>
                                                 <option>Employee</option>
                                                 <option>Manager</option>
+                                                <option>AttendanceManager</option>
                                                 <option>Admin</option>
                                             </select>
                                         </div>
@@ -200,6 +201,7 @@ export default function UsersPage() {
                                             <select className="form-select" value={editUser.role} onChange={setEdit('role')}>
                                                 <option>Employee</option>
                                                 <option>Manager</option>
+                                                <option>AttendanceManager</option>
                                                 <option>Admin</option>
                                             </select>
                                         </div>

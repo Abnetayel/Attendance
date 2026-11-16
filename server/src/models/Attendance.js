@@ -33,6 +33,12 @@ const attendanceSchema = new mongoose.Schema(
             trim: true,
             default: '',
         },
+        // The user (typically an AttendanceManager) who recorded this check-in/out
+        recordedBy: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User',
+            default: null,
+        },
     },
     { timestamps: true }
 );

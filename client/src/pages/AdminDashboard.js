@@ -124,7 +124,7 @@ export default function AdminDashboard() {
                         {loading && <div className="spinner-border spinner-border-sm text-primary" />}
                     </div>
 
-                    <AttendanceTable records={records} showEmployee />
+                    <AttendanceTable records={records} showEmployee showRecordedBy />
 
                     {/* Pagination */}
                     {totalPages > 1 && (

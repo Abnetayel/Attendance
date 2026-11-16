@@ -2,7 +2,7 @@ import StatusBadge from './StatusBadge';
 
 const fmt = (ts) => ts ? new Date(ts).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }) : '—';
 
-export default function AttendanceTable({ records, showEmployee = false }) {
+export default function AttendanceTable({ records, showEmployee = false, showRecordedBy = false }) {
     if (!records?.length) {
         return (
             <div className="text-center py-5 text-muted">
@@ -24,6 +24,7 @@ export default function AttendanceTable({ records, showEmployee = false }) {
                         <th>Check Out</th>
                         <th>Total Hours</th>
                         <th>Status</th>
+                        {showRecordedBy && <th>Recorded By</th>}
                         <th>Notes</th>
                     </tr>
                 </thead>
@@ -41,6 +42,7 @@ export default function AttendanceTable({ records, showEmployee = false }) {
                                     : '—'}
                             </td>
                             <td><StatusBadge status={r.status} /></td>
+                            {showRecordedBy && <td className="text-muted small">{r.recordedBy?.name || '—'}</td>}
                             <td className="text-muted small">{r.notes || '—'}</td>
                         </tr>
                     ))}

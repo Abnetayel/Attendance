@@ -44,7 +44,9 @@ App runs at http://localhost:3000, API at http://localhost:5000.
 
 ## Features
 
-- JWT authentication with role-based access (Admin / Manager / Employee)
+- JWT authentication with role-based access (Admin / Manager / AttendanceManager / Employee)
+- Attendance Manager records check-in / check-out on behalf of employees (no employee login needed)
+- Each attendance record tracks the user who recorded it
 - Check-in / Check-out with late detection (past 9:00 AM = Late)
 - Half-day detection (< 4 hours = Half-Day on checkout)
 - Total working hours calculation
@@ -62,13 +64,15 @@ App runs at http://localhost:3000, API at http://localhost:5000.
 | GET | /api/auth/me | ✓ | Any |
 | POST | /api/attendance/check-in | ✓ | Any |
 | POST | /api/attendance/check-out | ✓ | Any |
+| POST | /api/attendance/record/check-in | ✓ | AttendanceManager / Admin |
+| POST | /api/attendance/record/check-out | ✓ | AttendanceManager / Admin |
 | GET | /api/attendance/my-history | ✓ | Any |
 | GET | /api/attendance/today | ✓ | Any |
-| GET | /api/attendance/admin/all | ✓ | Admin/Manager |
-| GET | /api/attendance/admin/summary | ✓ | Admin/Manager |
+| GET | /api/attendance/admin/all | ✓ | Admin / Manager / AttendanceManager |
+| GET | /api/attendance/admin/summary | ✓ | Admin / Manager / AttendanceManager |
 | POST | /api/leaves | ✓ | Any |
 | GET | /api/leaves/my | ✓ | Any |
 | GET | /api/leaves/admin/all | ✓ | Admin/Manager |
 | PATCH | /api/leaves/:id/review | ✓ | Admin/Manager |
-| GET | /api/users | ✓ | Admin/Manager |
+| GET | /api/users | ✓ | Admin / Manager / AttendanceManager |
 | PATCH | /api/users/:id | ✓ | Admin |

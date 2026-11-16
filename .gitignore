@@ -6,7 +6,7 @@ server/node_modules/
 # Environment variables — NEVER commit these
 .env
 server/.env
-
+.env.example
 # Build output
 client/build/
 
