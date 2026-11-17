@@ -1,8 +1,12 @@
 const User = require('../models/User');
+const crypto = require('crypto');
+const PasswordResetToken = require('../models/PasswordResetToken');
+const { sendWelcomeEmail } = require('../services/email.service');
 
 // Predefined default password assigned to every newly created user.
-// The user logs in with this and should change it afterwards.
-// Override via the DEFAULT_EMPLOYEE_PASSWORD env variable if needed.
+// The user can log in with this immediately and should change it afterwards
+// (the emailed link lets them set their own). Override via the
+// DEFAULT_EMPLOYEE_PASSWORD env variable if needed.
 const DEFAULT_PASSWORD = process.env.DEFAULT_EMPLOYEE_PASSWORD || 'Employee@123';
 
 // GET /api/users  - Admin/Manager
@@ -72,7 +76,7 @@ const createUser = async (req, res) => {
 
     // Assign the predefined default password so the employee can log in
     // immediately using their email + this password. passwordSet stays false
-    // until the employee sets their own password.
+    // until the employee sets their own password via the emailed link.
     const user = await User.create({
       name,
       email,
@@ -82,9 +86,31 @@ const createUser = async (req, res) => {
       passwordSet: false,
     });
 
+    // Generate a one-time setup token and email a password-setup link
+    // (based on the existing email.service / PasswordResetToken code).
+    const rawToken = crypto.randomBytes(32).toString('hex');
+    const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours
+    await PasswordResetToken.create({ userId: user._id, token: rawToken, expiresAt });
+
+    const clientUrl = process.env.CLIENT_URL || 'http://localhost:3000';
+    const setupLink = `${clientUrl}/set-password?token=${rawToken}`;
+
+    // Send the welcome email (non-blocking — don't fail user creation if email fails)
+    let emailSent = false;
+    try {
+      await sendWelcomeEmail({ to: email, name, setupLink });
+      emailSent = true;
+    } catch (emailErr) {
+      console.error('⚠️  Welcome email failed:', emailErr.message, emailErr.code || '');
+    }
+
     res.status(201).json({
-      message: 'User created with the default password. Instruct the employee to log in and change it.',
+      message: emailSent
+        ? 'User created. A password setup email has been sent. The employee can also log in with the default password.'
+        : 'User created with the default password. The welcome email could not be sent — share the setup link manually.',
       defaultPassword: DEFAULT_PASSWORD,
+      setupLink,
+      emailSent,
       user: {
         _id: user._id,
         name: user.name,

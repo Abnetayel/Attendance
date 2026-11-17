@@ -29,6 +29,11 @@ export default function UsersPage() {
         try {
             const { data } = await api.post('/users', newUser);
             toast.success(`Employee added. Default password: ${data.defaultPassword}`);
+            if (data.emailSent) {
+                toast.info('A password setup link was emailed to the employee.');
+            } else {
+                toast.warn('Email could not be sent — share this setup link: ' + data.setupLink, { autoClose: 15000 });
+            }
             setShowAdd(false);
             setNewUser(EMPTY_NEW);
             fetchUsers();
@@ -146,7 +151,7 @@ export default function UsersPage() {
                                         <div className="col-12">
                                             <p className="text-muted small mb-0">
                                                 <i className="bi bi-info-circle me-1"></i>
-                                                The employee is assigned the default password and can log in immediately.
+                                                The employee is assigned the default password and can log in immediately. A password setup link is also emailed to them.
                                             </p>
                                         </div>
                                         <div className="col-md-6">
