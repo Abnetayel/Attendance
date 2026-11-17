@@ -2,7 +2,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'https://eams-backend-2hgm.onrender.com/api',
+  baseURL: 'https://eam-backend-6v6k.onrender.com/api',
   withCredentials: true,
 });
 
