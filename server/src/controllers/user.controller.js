@@ -92,7 +92,7 @@ const createUser = async (req, res) => {
     const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours
     await PasswordResetToken.create({ userId: user._id, token: rawToken, expiresAt });
 
-    const clientUrl = process.env.CLIENT_URL || 'http://localhost:3000';
+    const clientUrl = (process.env.CLIENT_URL || 'http://localhost:3000').replace(/\/+$/, '');
     const setupLink = `${clientUrl}/set-password?token=${rawToken}`;
 
     // Send the welcome email (non-blocking — don't fail user creation if email fails)
