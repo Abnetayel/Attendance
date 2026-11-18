@@ -1,4 +1,4 @@
-import { Navigate, Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import Layout from './components/Layout';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import AdminDashboard from './pages/AdminDashboard';
@@ -17,6 +17,16 @@ const ProtectedRoute = ({ children, roles }) => {
   if (!user) return <Navigate to="/login" replace />;
   if (roles && !roles.includes(user.role)) return <Navigate to="/dashboard" replace />;
   return children;
+};
+
+// Catch-all that normalizes accidental double slashes (e.g. an emailed invite
+// link like //set-password) before redirecting unknown paths to the dashboard.
+const FallbackRoute = () => {
+  const { pathname, search } = useLocation();
+  if (pathname.startsWith('//')) {
+    return <Navigate to={`${pathname.replace(/^\/+/, '/')}${search}`} replace />;
+  }
+  return <Navigate to="/dashboard" replace />;
 };
 
 const AppRoutes = () => {
@@ -57,7 +67,7 @@ const AppRoutes = () => {
         />
       </Route>
 
-      <Route path="*" element={<Navigate to="/dashboard" />} />
+      <Route path="*" element={<FallbackRoute />} />
     </Routes>
   );
 };
